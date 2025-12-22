@@ -54,6 +54,17 @@ public class SharedVector {
         }
     }
 
+    //Assistant getter for the class. In use in SharedMatrix
+    public double[] getVector() {
+        readLock();
+        try {
+            return vector.clone();
+        }
+        finally {
+            readUnlock();
+        }
+    }
+
     public void writeLock() {
         // TODO: acquire write lock
         lock.writeLock().lock();
@@ -79,7 +90,7 @@ public class SharedVector {
         //Using a writeLock because the function is changing the value of orientation
         writeLock();
         try {
-            if (orientation.equals(VectorOrientation.COLUMN_MAJOR)) {
+            if (orientation == VectorOrientation.COLUMN_MAJOR) {
                 orientation = VectorOrientation.ROW_MAJOR;
             } else {
                 orientation = VectorOrientation.COLUMN_MAJOR;
@@ -171,6 +182,7 @@ public class SharedVector {
                 newVector[i] = this.dot(matrix.get(i));
             }
             vector = newVector;
+
         }
         finally {
             writeUnlock();
