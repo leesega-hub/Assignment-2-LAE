@@ -72,7 +72,7 @@ public class SharedMatrix {
 
 
     public double[][] readRowMajor() {
-        // TODO: return matrix contents as a row-major double[][]
+        // DONE: return matrix contents as a row-major double[][]
         //Saving the current state of the array for safety
         SharedVector[] currentVectors = this.vectors;
 
@@ -113,17 +113,32 @@ public class SharedMatrix {
 
     public SharedVector get(int index) {
         // DONE: return vector at index
-        return vectors[index];
+        acquireAllVectorReadLocks(vectors);
+        try {
+            if (index < 0 || index >= vectors.length) {
+                throw new IndexOutOfBoundsException();
+            }
+            return vectors[index];
+        }
+        finally {
+            releaseAllVectorReadLocks(vectors);
+        }
     }
 
     public int length() {
         // DONE: return number of stored vectors
+        //The array is initialized as empty so no null pointer danger. so no need to lock the vectors.
         return vectors.length;
     }
 
     public VectorOrientation getOrientation() {
         // DONE: return orientation
-        return vectors[0].getOrientation();
+        //Creating a local reference of vectors to prevent index out of bounds error in case of change in the original array
+        SharedVector[] currentVectors = vectors;
+        if (vectors == null || currentVectors.length == 0) {
+            throw new IllegalArgumentException("The matrix is empty, no orientation defined.");
+        }
+        return currentVectors[0].getOrientation();
     }
 
     private void acquireAllVectorReadLocks(SharedVector[] vecs) {
@@ -158,6 +173,7 @@ public class SharedMatrix {
 
     //Assistant function for the class. return true if the matrix is ROW_MAJOR. Return false otherwise.
     public boolean isRowMajor() {
+        //No need to lock the vectors because they are already locked when the function is called.
         if (vectors.length == 0) {
             return false;
         }
