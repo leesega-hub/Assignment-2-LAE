@@ -23,19 +23,22 @@ public class SharedMatrix {
 
         //Using a write lock for all the vectors to insure a correct updating
         SharedVector[] oldVectors = vectors;
+        SharedVector[] newVectors = new SharedVector[matrix.length];
         acquireAllVectorWriteLocks(oldVectors);
         try {
             int numRows = matrix.length;
-            SharedVector[] newVectors = new SharedVector[matrix.length];
+            
             for (int i = 0; i < numRows; i++) {
                 double[] vector = matrix[i];
                 SharedVector sharedVector = new SharedVector(vector, VectorOrientation.ROW_MAJOR);
                 newVectors[i] = sharedVector;
             }
-            vectors = newVectors;
+           
         }
         finally {
+            // first relese the old vectors lock before swithching
             releaseAllVectorWriteLocks(oldVectors);
+             vectors = newVectors;
         }
     }
 
@@ -50,11 +53,12 @@ public class SharedMatrix {
 
         //Using a write lock for all the vectors to insure a correct updating
         SharedVector[] oldVectors = vectors;
+        SharedVector[] newVectors = new SharedVector[matrix[0].length];
         acquireAllVectorWriteLocks(oldVectors);
         try {
             int numCols = matrix[0].length;
             int numRows = matrix.length;
-            SharedVector[] newVectors = new SharedVector[numCols];
+            
             for (int i = 0; i < numCols; i++) {
                 double[] vector = new double[numRows];
                 for (int j = 0; j < numRows; j++){
@@ -63,10 +67,12 @@ public class SharedMatrix {
                 SharedVector sharedVector = new SharedVector(vector, VectorOrientation.COLUMN_MAJOR);
                 newVectors[i] = sharedVector;
             }
-            vectors = newVectors;
+            
         }
         finally {
+            // first relese the old vectors lock before swithching 
             releaseAllVectorWriteLocks(oldVectors);
+            vectors = newVectors;
         }
     }
 
