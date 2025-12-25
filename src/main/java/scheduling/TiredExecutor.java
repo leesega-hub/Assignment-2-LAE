@@ -26,7 +26,7 @@ public class TiredExecutor {
             //add ot in flight and take from heap thread
         inFlight.addAndGet(1);
         TiredThread toSubmTiredThread = idleMinHeap.take();
-        //wraaeps the task and add to heap in the end 
+        //wraps the task and add to heap in the end
         Runnable wrapedTask = () -> {
             try{
                 task.run();
