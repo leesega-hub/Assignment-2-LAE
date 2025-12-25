@@ -30,6 +30,7 @@ public class TestSharedVector {
         assertEquals(7.0, sv1.get(1), 0.0001);
         assertEquals(9.0, sv1.get(2), 0.0001);
 
+
         
     }
 
@@ -39,6 +40,8 @@ public class TestSharedVector {
         SharedVector sv2 = new SharedVector(new double[]{4.0, 5.0, 6.0}, VectorOrientation.COLUMN_MAJOR);
         double result = sv1.dot(sv2);
         assertEquals(32.0, result);
+
+        
         
     }
 
@@ -86,4 +89,20 @@ public class TestSharedVector {
         
         assertThrows(IllegalArgumentException.class, () -> row.dot(row2));
     }
+
+    @Test 
+    public void TestVectorMetrixMultiplication(){
+        double[][] data = {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0},
+            {7.0, 8.0, 9.0}
+        };
+        SharedMatrix RowMx = new SharedMatrix();
+        RowMx.loadRowMajor(data);
+        SharedVector ColVec = new SharedVector(new double[]{1.0,2.0,3.0}, VectorOrientation.COLUMN_MAJOR);
+        SharedVector RowVec = new SharedVector(new double[]{1.0,2.0,3.0}, VectorOrientation.ROW_MAJOR);
+
+        RowVec.vecMatMul(RowMx);
+    }
+
 }

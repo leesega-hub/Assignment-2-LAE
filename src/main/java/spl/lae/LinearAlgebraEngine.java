@@ -29,6 +29,12 @@ public class LinearAlgebraEngine {
         while (computationRoot.getNodeType() != ComputationNodeType.MATRIX) {
             loadAndCompute(computationRoot);
         }
+        try{
+            executor.shutdown();
+        }
+        catch (InterruptedException e){
+            Thread.currentThread().interrupt();
+        }
         return computationRoot;
     }
 
@@ -76,6 +82,11 @@ public class LinearAlgebraEngine {
 
     public List<Runnable> createAddTasks() {
         // DONE: return tasks that perform row-wise addition
+        // we dont have a operand in the ,matrix file so we cheak here , we have a cheak in the vector but it is to late, same for all oprands
+
+        //this line is incurrect the lentgh is how many vectors we have in the list it dosent have to match : example 3x2 and 2x3
+        // this bring a more genral cuastion do we need to add only if this is row major and colum major or we need to constracte new mertixses with
+        // the right orientation?
         if (leftMatrix.length() != rightMatrix.length()) {
             throw new IllegalArgumentException("Addition is only performed for same size matrices.");
         }
@@ -94,6 +105,8 @@ public class LinearAlgebraEngine {
         if (leftMatrix.length() == 0 || rightMatrix.length() == 0) {
             throw new IllegalArgumentException("Multiplication can't be performed with empty matrices");
         }
+        // i think the cheak is complex , cheak if he is a colum major and the other is row major and the sizes are suitable for multiplication
+        // also do we need to abort it the ipoentetion is not suitable or we can create a new matrix with the right orientation?
         if (!(leftMatrix.isRowMajor()) || rightMatrix.isRowMajor() ||
                 leftMatrix.get(0).length() != rightMatrix.get(0).length()) {
             throw new IllegalArgumentException("the sizes of the matrices are not suitable for multiplication.");
@@ -102,7 +115,7 @@ public class LinearAlgebraEngine {
         for (int i = 0; i < leftMatrix.length(); i++) {
             final int rowIndex = i;
             tasks.add(() -> { //Lambada runnable function
-                leftMatrix.get(rowIndex).dot(rightMatrix.get(rowIndex));
+                leftMatrix.get(rowIndex).vecMatMul(rightMatrix);
             });
         }
         return tasks;
