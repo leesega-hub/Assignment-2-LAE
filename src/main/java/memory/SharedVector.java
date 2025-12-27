@@ -176,16 +176,16 @@ public class SharedVector {
         }
         //Using a writeLock because now the function is changing the values in the vector array
         writeLock();
-        try {
-            double newVector[] = new double[matrix.length()];
+        double newVector[] = new double[matrix.length()];
+        try {  
             for (int i = 0; i < matrix.length(); i++) {
                 newVector[i] = this.dot(matrix.get(i));
-            }
-            vector = newVector;
+            }   
 
         }
         finally {
             writeUnlock();
+            this.vector = newVector;
         }
     }
 }
