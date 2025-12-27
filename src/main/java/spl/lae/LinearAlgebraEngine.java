@@ -24,7 +24,7 @@ public class LinearAlgebraEngine {
     public ComputationNode run(ComputationNode computationRoot) {
         // DONE: resolve computation tree step by step until final matrix is produced
         if (computationRoot == null) {
-            throw new IllegalArgumentException("computationRoot is null");
+            throw new NullPointerException("computationRoot is null");
         }
         while (computationRoot.getNodeType() != ComputationNodeType.MATRIX) {
             loadAndCompute(computationRoot);

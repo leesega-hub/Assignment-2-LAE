@@ -167,7 +167,7 @@ public class SharedVector {
         // TODO: compute row-vector × matrix
 
         if (matrix == null) {
-            throw new IllegalArgumentException("matrix input is null");
+            throw new NullPointerException("matrix input is null");
         }
         if (orientation != VectorOrientation.ROW_MAJOR ||
                 matrix.get(0).orientation != VectorOrientation.COLUMN_MAJOR ||

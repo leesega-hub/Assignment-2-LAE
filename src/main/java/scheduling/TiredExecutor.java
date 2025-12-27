@@ -77,8 +77,8 @@ public class TiredExecutor {
         for(TiredThread worker: workers){
             report.append(
                 "worker " + worker.getWorkerId() + " is now busy(true/false) -" + worker.isBusy() + 
-                " has worked " + worker.getTimeUsed() + " time "
-                +"has rested for " + worker.getTimeIdle()
+                " has worked " + worker.getTimeUsed() + " nanoseconds, "
+                +"has rested for " + worker.getTimeIdle() + " nanoseconds"
                  +" and with fatigue score of " + worker.getFatigue()+ '\n' 
             );
             

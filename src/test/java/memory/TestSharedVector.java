@@ -93,16 +93,37 @@ public class TestSharedVector {
     @Test 
     public void TestVectorMetrixMultiplication(){
         double[][] data = {
-            {1.0, 2.0, 3.0},
-            {4.0, 5.0, 6.0},
-            {7.0, 8.0, 9.0}
+            {1.0, 4.0},
+            {2.0, 5.0},
+            {3.0, 6.0}
         };
+        double[][] data2 = {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0}
+        };
+        double[][] data3 = {
+            {1.0, 2.0, 3.0},
+            {4.0, 5.0, 6.0}
+        };
+        SharedMatrix ColMx = new SharedMatrix();
+        ColMx.loadColumnMajor(data);
         SharedMatrix RowMx = new SharedMatrix();
-        RowMx.loadRowMajor(data);
+        RowMx.loadRowMajor(data2);
+        SharedMatrix ColMx2 = new SharedMatrix();
+        ColMx2.loadColumnMajor(data3);
         SharedVector ColVec = new SharedVector(new double[]{1.0,2.0,3.0}, VectorOrientation.COLUMN_MAJOR);
         SharedVector RowVec = new SharedVector(new double[]{1.0,2.0,3.0}, VectorOrientation.ROW_MAJOR);
 
-        RowVec.vecMatMul(RowMx);
-    }
+        RowVec.vecMatMul(ColMx);
+        assertEquals(14, RowVec.get(0), 0.0001);
+        assertEquals(32, RowVec.get(1), 0.0001);
 
+        //check acceptance
+        assertThrows(NullPointerException.class, () -> ColVec.vecMatMul(null));
+        assertThrows(IllegalArgumentException.class, () -> ColVec.vecMatMul(RowMx));
+        assertThrows(IllegalArgumentException.class, () -> RowVec.vecMatMul(ColMx));
+        assertThrows(IllegalArgumentException.class, () -> ColVec.vecMatMul(ColMx2));
+        
+
+    }
 }
