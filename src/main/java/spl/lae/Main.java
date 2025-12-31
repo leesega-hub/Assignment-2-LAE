@@ -32,6 +32,17 @@ public class Main {
         //Catching parse exception
         } catch (ParseException e) {
             OutputWriter.write(e.getMessage(), outputPath);
+        } catch (IllegalArgumentException e) {
+            OutputWriter.write(e.getMessage(), outputPath);
+        } catch (Exception e) {
+            OutputWriter.write("An error occurred during computation: " + e.getMessage(), outputPath);
+        }finally {
+            try {
+                LAE.shutdownExecutor();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
+        
     }
 }

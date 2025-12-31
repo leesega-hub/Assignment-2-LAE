@@ -150,4 +150,8 @@ public class LinearAlgebraEngine {
         // DONE: return summary of worker activity
         return executor.getWorkerReport();
     }
+
+    public void shutdownExecutor() throws InterruptedException {
+        executor.shutdown();
+    }
 }
